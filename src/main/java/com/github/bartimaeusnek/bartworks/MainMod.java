@@ -108,7 +108,12 @@ public final class MainMod {
 
         LoaderReference.init(); //Check for ALL the mods.
 
-        if (LoaderReference.miscutils) {
+        if (LoaderReference.dreamcraft)
+            ConfigHandler.hardmode = true;
+
+        ConfigHandler.hardmode = ConfigHandler.ezmode != ConfigHandler.hardmode;
+
+        if (LoaderReference.miscutils && ConfigHandler.hardmode) {
             if (SideReference.Side.Client)
                 ClientGTppWarning();
 
@@ -120,11 +125,6 @@ public final class MainMod {
         if (LoaderReference.miscutils && ConfigHandler.GTppLogDisabler) {
             STFUGTPPLOG.replaceLogger();
         }
-
-        if (LoaderReference.dreamcraft)
-            ConfigHandler.hardmode = true;
-
-        ConfigHandler.hardmode = ConfigHandler.ezmode != ConfigHandler.hardmode;
 
         if (API_ConfigValues.debugLog) {
             try {
@@ -203,7 +203,8 @@ public final class MainMod {
     public void onModLoadingComplete(FMLLoadCompleteEvent event) {
         removeIC2Recipes();
         StaticRecipeChangeLoaders.addElectricImplosionCompressorRecipes();
-        PlatinumSludgeOverHaul.replacePureElements();
+        if(ConfigHandler.hardmode)
+        	PlatinumSludgeOverHaul.replacePureElements();
 
         runOnServerStarted();
         StaticRecipeChangeLoaders.unificationRecipeEnforcer();
